@@ -1,3 +1,5 @@
+# Piranha Syntax Highlighter for Sublime Text
+
 This repository contains a complete syntax highlighter for the Piranha programming and scripting language within Sublime Text.
 
 Whether small powerful scripts or complex programs are being developed in Piranha,
