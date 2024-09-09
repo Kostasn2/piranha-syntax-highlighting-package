@@ -1,0 +1,9 @@
+<snippet>
+  <content><![CDATA[
+node ${1:NodeName} {
+    ${2:attributes}
+}
+]]></content>
+  <tabTrigger>node</tabTrigger>
+  <scope>source.piranha</scope>
+</snippet>

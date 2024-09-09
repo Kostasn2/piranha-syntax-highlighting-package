@@ -1,0 +1,184 @@
+%YAML 1.2
+---
+name: Piranha
+file_extensions:
+  - mr
+scope: source.mr
+
+contexts:
+  main:
+    # Decorators
+    - match: '\bnode\b'
+      scope: keyword.control.node.piranha
+
+    - match: '\b(as|public|private|module|inline|auto)\b'
+      scope: storage.modifier.piranha
+
+    - match: '\b(input|output|modify|toggle)\b'
+      scope: entity.other.attribute-name.piranha
+
+    - match: '\balias\b'
+      scope: keyword.control.alias.piranha
+
+    - match: '\bimport\b'
+      scope: keyword.control.import.piranha
+
+    - match: '\b(true|false)\b'
+      scope: constant.language.piranha
+
+    - match: '@[a-zA-Z_][a-zA-Z_0-9]*\s*:'
+      scope: entity.name.function.decorator.piranha
+      push:
+        - meta_scope: meta.decorator.piranha
+        - match: '\n'
+          pop: true
+        - include: strings
+
+    # Node definition and instance patterns
+    - match: '\bnode\b\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\{'
+      captures:
+        1: storage.type.piranha
+        2: entity.name.class.piranha
+      push: node_block
+
+    # Node with tag
+    - match: '\bnode\b\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*=>\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*\{'
+      captures:
+        1: storage.type.piranha
+        2: entity.name.class.piranha
+        3: entity.name.tag.piranha
+      push: node_block
+
+    # Node instance call patterns
+    - match: '([a-zA-Z_][a-zA-Z_0-9]*)\s*\('
+      scope: entity.name.function.piranha
+      push:
+        - match: '\)'
+          pop: true
+        - include: attribute_specification
+
+    - match: '([a-zA-Z_][a-zA-Z_0-9]*)\s+([a-zA-Z_][a-zA-Z_0-9]*)\s*\('
+      captures:
+        1: entity.name.class.piranha
+        2: entity.name.function.piranha
+      push:
+        - match: '\)'
+          pop: true
+        - include: attribute_specification
+
+    # Global keywords and modifiers
+    # - match: '\bnode\b'
+    #   scope: keyword.control.node.piranha
+
+
+
+    # Strings
+    - match: '"'
+      scope: punctuation.definition.string.begin.piranha
+      push: double_quoted_string
+
+    # Numbers (decimal and hexadecimal)
+    - match: '\b0x[0-9a-fA-F]+\b'
+      scope: constant.numeric.hex.piranha
+
+    - match: '\b\d+(\.\d+)?\b'
+      scope: constant.numeric.piranha
+
+    # Comments
+    - match: '//'
+      scope: punctuation.definition.comment.piranha
+      push: line_comment
+
+    - match: '/\*'
+      scope: punctuation.definition.comment.block.piranha
+      push: block_comment
+
+  # Block for handling nodes
+  node_block:
+    - meta_scope: meta.block.node.piranha
+    - match: '\}'
+      pop: true
+    - include: attributes
+    - include: node_instance
+    - include: comments
+    - include: decorators
+
+  # Double quoted strings and escape sequences
+  double_quoted_string:
+    - meta_scope: string.quoted.double.piranha
+    - match: '\\\\.'
+      scope: constant.character.escape.piranha
+    - match: '"'
+      scope: punctuation.definition.string.end.piranha
+      pop: true
+
+  # Line comments
+  line_comment:
+    - meta_scope: comment.line.double-slash.piranha
+    - match: $
+      pop: true
+
+  # Block comments
+  block_comment:
+    - meta_scope: comment.block.piranha
+    - match: '\*/'
+      pop: true
+
+  #Attribute specification within nodes
+  attribute_specification:
+    - match: '([a-zA-Z_][a-zA-Z_0-9]*)\s*:'
+      scope: entity.other.attribute-name.piranha
+    - match: '\b(node|output|alias|input|public|private|as)\b'
+      scope: invalid.illegal.piranha
+    - include: main
+
+  # Handling attributes inside nodes
+  attributes:
+    - match: '(input|output|modify|toggle)(\s+[a-zA-Z_][a-zA-Z_0-9]*)\s*\['
+      captures:
+        1: storage.modifier.piranha
+        2: entity.other.attribute-name.piranha
+      push:
+        - meta_scope: meta.attribute.piranha
+        - match: '\]'
+          pop: true
+        - match: '(.*?)\s*::\s*([a-zA-Z_][a-zA-Z_0-9]*)'
+          captures:
+            1: entity.meta.piranha
+            2: entity.name.class.piranha
+        - include: main
+
+    - match: '(input|output|modify|toggle)\s+[a-zA-Z_][a-zA-Z_0-9]*'
+      captures:
+        1: storage.modifier.piranha
+        2: entity.other.attribute-name.piranha
+
+    - include: main
+
+  # Node instance handling
+  node_instance:
+    - match: '([a-zA-Z_][a-zA-Z_0-9]*)\s*\('
+      scope: entity.meta.piranha
+      push:
+        - match: '\)'
+          pop: true
+        - include: attribute_specification
+
+    - match: '([a-zA-Z_][a-zA-Z_0-9]*)\s+([a-zA-Z_][a-zA-Z_0-9]*)\s*\('
+      captures:
+        1: entity.name.class.piranha
+        2: entity.name.function.piranha
+      push:
+        - match: '\)'
+          pop: true
+        - include: attribute_specification
+
+  # Decorators for nodes and attributes
+  decorators:
+    - match: '@[a-zA-Z_][a-zA-Z_0-9]*\s*:'
+      scope: entity.name.function.decorator.piranha
+      push:
+        - meta_scope: meta.decorator.piranha
+        - match: '\n'
+          pop: true
+        - include: strings

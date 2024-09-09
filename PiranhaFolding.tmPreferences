@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plist version="1.0">
+  <dict>
+    <key>name</key>
+    <string>Folding for Piranha</string>
+    <key>scope</key>
+    <string>source.piranha</string>
+    <key>settings</key>
+    <dict>
+      <key>foldingStartMarker</key>
+      <string>\{\s*$</string>
+      <key>foldingStopMarker</key>
+      <string>^\s*\}</string>
+    </dict>
+  </dict>
+</plist>
