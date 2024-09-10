@@ -7,3 +7,5 @@ this will boost your development experience by providing clear and intuitive syn
 
 Piranha, written by [Ange Yaghi](https://github.com/ange-yaghi/piranha), is a flexible and precise tool, 
 and this syntax highlighter provides an assurance that the syntax will be beautifully rendered in Sublime Text while making coding in Piranha more productive and enjoyable.
+
+For instructions on download view Wiki!
