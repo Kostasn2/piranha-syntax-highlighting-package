@@ -3,7 +3,7 @@
 name: Piranha
 file_extensions:
   - mr
-scope: source.mr
+scope: source.piranha
 
 contexts:
   main:
