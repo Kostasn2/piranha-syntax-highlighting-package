@@ -1,3 +1,8 @@
+<!--
+Copyright (C) 2026 Kostasn2
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
 <snippet>
   <content><![CDATA[
 node ${1:NodeName} {
